@@ -1,0 +1,8 @@
+FROM node:18-alpine AS installer
+WORKDIR /app
+COPY package*.json ./
+RUN npm installer
+COPY ..
+RUN npm run build
+FROM nginx:latest AS deployer
+COPY --from=installer /app/build /app/build/usr/share/nginx/html
